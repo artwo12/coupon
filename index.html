@@ -31,12 +31,22 @@
     max-width:430px; min-width:320px; margin:0 auto;
     height:100dvh; display:flex; flex-direction:column; position:relative;
   }
+
+  /* ---------- OGM02: 웹 진입 전용 상단 바 ('오글오글 앱으로 보기') ---------- */
+  .web-entry-bar{
+    flex-shrink:0; display:none; align-items:center; justify-content:center; gap:6px;
+    height:34px; background:#1A1A1A; color:#fff; font-size:12.5px; font-weight:600;
+    padding-top:var(--safe-t);
+  }
+  .web-entry-bar.show{ display:flex; }
+
   /* ---------- Top bar ---------- */
   .topbar{
     flex-shrink:0;
-    padding:calc(14px + var(--safe-t)) 20px 10px;
+    padding:14px 20px 10px;
     display:flex; align-items:center; justify-content:space-between;
   }
+  .web-entry-bar.show ~ .screen-wrap{ }
   .brand{font-size:15px; font-weight:800; color:var(--primary); letter-spacing:-0.3px;}
   .points-pill{
     display:flex; align-items:center; gap:6px;
@@ -53,47 +63,55 @@
 
   /* ---------- Screen area ---------- */
   .screen-wrap{
-    flex:1; min-height:0; overflow-y:auto; padding:0 20px;
-    display:flex; flex-direction:column;
+    flex:1; min-height:0; padding:0 20px;
+    display:flex; flex-direction:column; position:relative;
   }
   .screen{ display:none; flex-direction:column; height:100%; }
   .screen.active{ display:flex; animation:slideUp .3s ease; }
+  /* OGM03 메인만 세로 스크롤 허용, 플레이/결과는 고정 */
+  #screen-main.active{ overflow-y:auto; }
+  #screen-play.active, #screen-result.active{ overflow:hidden; }
   @keyframes slideUp{ from{ transform:translateY(16px); opacity:0;} to{ transform:translateY(0); opacity:1;} }
 
-  /* ---------- Home screen ---------- */
-  .hero{ text-align:center; margin-top:6px; margin-bottom:14px; }
+  /* ---------- OGM03 메인 화면 ---------- */
+  .event-period{
+    text-align:center; font-size:12.5px; color:var(--muted); font-weight:600;
+    margin:10px 0 2px;
+  }
+  .hero{ text-align:center; margin-top:2px; margin-bottom:14px; }
   .hero-emoji{ font-size:40px; display:block; margin-bottom:6px; }
   .title{ font-size:32px; font-weight:800; letter-spacing:-0.5px; margin:0 0 6px; }
   .title em{ color:var(--primary); font-style:normal; }
   .subtitle{ font-size:14px; color:var(--muted); margin:0; line-height:1.5; }
 
-  .field{ margin-bottom:14px; }
-  .field label{ display:block; font-size:14px; font-weight:700; margin-bottom:8px; color:var(--text); }
-  .field input[type="date"]{
-    width:100%; height:52px; border-radius:14px; border:1.5px solid var(--line);
-    background:#fff; padding:0 16px; font-size:16px; font-weight:600; color:var(--text);
-    font-family:inherit;
-  }
-  .field input[type="date"]:focus{ outline:2px solid var(--primary); outline-offset:1px; }
-
-  .disclaimer{ font-size:11.5px; color:var(--muted); line-height:1.5; margin:0 0 4px; }
-  .reset-link{ font-size:11.5px; color:var(--muted); text-decoration:underline; background:none; border:none; padding:0; margin:0 0 12px; cursor:pointer; }
-
   .rule-box{
     display:flex; align-items:center; gap:6px; flex-wrap:wrap;
     background:#FFF7E6; border:1.5px solid #FFE1A8; border-radius:12px;
-    padding:10px 12px; font-size:12.5px; color:#8A5A00; line-height:1.5; margin-bottom:14px;
+    padding:10px 12px; font-size:12.5px; color:#8A5A00; line-height:1.5; margin:14px 0;
   }
   .rule-box b{ color:#B8101F; }
 
-  .hint-msg{
-    font-size:13px; color:var(--primary-dark); background:#FFF0EF; border-radius:10px;
-    padding:10px 12px; margin-bottom:12px; display:none; line-height:1.5;
+  .main-spacer{ flex:1; }
+
+  .today-status{ text-align:center; font-size:13px; color:var(--muted); margin-bottom:10px; }
+
+  .share-link{
+    display:block; width:100%; text-align:center; background:none; border:none;
+    color:var(--muted); font-size:13px; font-weight:600; text-decoration:underline;
+    padding:10px 0 2px; cursor:pointer;
   }
-  .hint-msg.show{ display:block; }
+
+  .notice-box{ margin-top:14px; margin-bottom:16px; }
+  .notice-box summary{
+    font-size:13px; font-weight:700; color:var(--text); cursor:pointer; padding:4px 0;
+    list-style:none; display:flex; align-items:center; gap:4px;
+  }
+  .notice-box summary::-webkit-details-marker{ display:none; }
+  .notice-box summary::after{ content:'▾'; color:var(--muted); font-size:11px; margin-left:2px; }
+  .notice-box[open] summary::after{ content:'▴'; }
+  .notice-box ul{ margin:8px 0 0; padding-left:18px; font-size:12px; color:var(--muted); line-height:1.7; }
 
   .footer-area{ margin-top:auto; padding-bottom:16px; }
-  .today-status{ text-align:center; font-size:13px; color:var(--muted); margin-bottom:10px; }
 
   /* ---------- Buttons ---------- */
   .btn{
@@ -112,9 +130,43 @@
   .btn-outline{ background:transparent; border:2px solid var(--primary); color:var(--primary); }
   .btn-ghost{ background:#F5F5F5; color:var(--text); }
   .btn-row{ display:flex; flex-direction:column; gap:10px; margin-top:10px; }
+  .text-link{
+    display:block; width:100%; text-align:center; background:none; border:none;
+    color:var(--muted); font-size:13.5px; font-weight:700; padding:10px 0 0; cursor:pointer;
+  }
 
-  /* ---------- Result screen ---------- */
-  .result-top{ text-align:center; padding-top:8px; }
+  /* ---------- OGM03_01 플레이 화면 ---------- */
+  .countdown-dim{
+    position:absolute; inset:0; background:#1A1A1A; z-index:20;
+    display:flex; align-items:center; justify-content:center;
+    opacity:1; transition:opacity .4s ease;
+  }
+  .countdown-dim.hide{ opacity:0; pointer-events:none; }
+  .countdown-text{ color:#fff; font-size:16px; font-weight:700; letter-spacing:-0.3px; }
+  .play-inner{ display:flex; flex-direction:column; height:100%; opacity:0; transition:opacity .4s ease; padding-top:8px; }
+  .play-inner.show{ opacity:1; }
+  .play-title{ font-size:20px; font-weight:800; text-align:center; margin:4px 0 18px; letter-spacing:-0.3px; }
+
+  .field{ margin-bottom:14px; }
+  .field label{ display:block; font-size:14px; font-weight:700; margin-bottom:8px; color:var(--text); }
+  .field input[type="date"]{
+    width:100%; height:52px; border-radius:14px; border:1.5px solid var(--line);
+    background:#fff; padding:0 16px; font-size:16px; font-weight:600; color:var(--text);
+    font-family:inherit;
+  }
+  .field input[type="date"]:focus{ outline:2px solid var(--primary); outline-offset:1px; }
+
+  .disclaimer{ font-size:11.5px; color:var(--muted); line-height:1.5; margin:0 0 4px; }
+  .reset-link{ font-size:11.5px; color:var(--muted); text-decoration:underline; background:none; border:none; padding:0; margin:0 0 12px; cursor:pointer; }
+
+  .hint-msg{
+    font-size:13px; color:var(--primary-dark); background:#FFF0EF; border-radius:10px;
+    padding:10px 12px; margin-bottom:12px; display:none; line-height:1.5;
+  }
+  .hint-msg.show{ display:block; }
+
+  /* ---------- OGM04 결과 화면 ---------- */
+  .result-top{ text-align:center; padding-top:8px; flex-shrink:0; }
   .couple-badge{ font-size:32px; margin-bottom:4px; }
   .ganji-line{ font-size:13px; color:var(--muted); font-weight:600; margin-bottom:8px; }
   .ganji-line b{ color:var(--text); }
@@ -128,12 +180,19 @@
   @keyframes scorePop{ 0%{ transform:scale(0);} 60%{ transform:scale(1.15);} 100%{ transform:scale(1);} }
   .score-unit{ font-size:20px; font-weight:700; color:var(--muted); }
 
+  .result-scroll{ flex:1; min-height:0; overflow-y:auto; }
+
   .story-card{
     background:#fff; border:1.5px solid var(--line); border-radius:18px; padding:16px;
     margin:14px 0; font-size:15px; line-height:1.6; color:var(--text);
   }
   .story-card b{ color:var(--primary); }
   .story-sub{ font-size:13px; color:var(--muted); margin-top:8px; line-height:1.6; }
+
+  .brag-link{
+    display:block; text-align:center; font-size:13px; color:var(--muted); font-weight:700;
+    text-decoration:underline; margin:2px 0 0; background:none; border:none; cursor:pointer;
+  }
 
   .point-earned{
     text-align:center; font-size:14px; font-weight:700; color:var(--gold);
@@ -159,7 +218,7 @@
   .ad-overlay .ad-box .ad-main{ font-size:20px; font-weight:800; }
   .ad-overlay .ad-timer{ margin-top:18px; font-size:14px; color:#ccc; }
 
-  /* ---------- Bottom fixed ad banner ---------- */
+  /* ---------- OGM18: 전 화면 고정 DA 배너 (최하단) ---------- */
   .ad-banner{
     flex-shrink:0; height:calc(100px + var(--safe-b));
     padding-bottom:var(--safe-b);
@@ -185,6 +244,9 @@
 <body>
 <div class="app" id="app">
 
+  <!-- OGM02: 웹 진입 시에만 노출되는 '오글오글 앱으로 보기' 바 (앱 진입 시엔 네이티브 appbar 사용, 이 배너는 숨김) -->
+  <div class="web-entry-bar" id="webEntryBar">📱 오글오글 앱에서 더 편하게 보기 &gt;</div>
+
   <div class="topbar">
     <div class="brand">🧧 궁합테스트</div>
     <div class="topbar-right">
@@ -195,8 +257,9 @@
 
   <div class="screen-wrap">
 
-    <!-- HOME SCREEN -->
-    <section class="screen active" id="screen-home">
+    <!-- ============ OGM03: 이벤트 메인 화면 ============ -->
+    <section class="screen active" id="screen-main">
+      <div class="event-period" id="eventPeriod"></div>
       <div class="hero">
         <span class="hero-emoji">💘</span>
         <h1 class="title">우리 <em>진짜</em> 궁합은?</h1>
@@ -207,30 +270,55 @@
         🏆 <b>오늘 총점 90점 이상</b>이면 <b>1P</b> 적립! (하루 최대 <b>9P</b>) · 같은 조합도 하루 지나면 새 기운으로 재도전 가능
       </div>
 
-      <div class="field">
-        <label for="dateA">나의 생년월일</label>
-        <input type="date" id="dateA">
-      </div>
-      <div class="field">
-        <label for="dateB">상대방 생년월일</label>
-        <input type="date" id="dateB">
-      </div>
-      <p class="disclaimer">* 재미로 보는 간이 사주 궁합이며, 정식 명리 상담을 대체하지 않아요. 입력한 날짜는 이 브라우저에만 저장돼요.</p>
-      <button class="reset-link" id="resetLink">테스트 기록 초기화</button>
-
-      <div class="hint-msg" id="dupMsg">이미 확인하신 궁합입니다 🙈</div>
-      <div class="hint-msg" id="noTryMsg">오늘의 무료 확인을 모두 사용했어요. 아래 광고 보고 한 번 더 버튼으로 도전해보세요!</div>
+      <div class="main-spacer"></div>
 
       <div class="footer-area">
-        <div class="today-status" id="todayStatus">오늘 무료 확인 1회 남음</div>
-        <button class="btn btn-primary" id="checkBtn">궁합 확인하기</button>
-        <div class="btn-row" id="homeAdRow" style="display:none;">
-          <button class="btn btn-ad" id="homeAdBtn">📺 광고 보고 한 번 더 하기</button>
+        <div class="today-status" id="todayStatusMain">1번 더 도전할 수 있어요</div>
+        <button class="btn btn-primary" id="startBtn">시작하기</button>
+        <button class="share-link" id="shareMainBtn">🔗 공유하기</button>
+        <div class="btn-row" id="mainAdRow" style="display:none;">
+          <button class="btn btn-ad" id="mainAdBtn">📺 광고 보고 한 번 더 하기</button>
         </div>
+
+        <details class="notice-box">
+          <summary>유의사항</summary>
+          <ul>
+            <li>본 결과는 재미로 제공되는 간이 사주 궁합이며, 정식 명리 상담을 대체하지 않아요.</li>
+            <li>입력하신 생년월일은 서버로 전송되지 않고 이 브라우저에만 저장돼요.</li>
+            <li>같은 두 사람 조합도 오늘의 기운(케미 보너스)에 따라 매일 점수가 달라질 수 있어요.</li>
+            <li>포인트 적립은 하루 최대 9P로 제한되며, 같은 조합은 하루 1회만 인정돼요.</li>
+            <li>이벤트 내용 및 기간은 사전 고지 없이 변경될 수 있어요.</li>
+          </ul>
+        </details>
       </div>
     </section>
 
-    <!-- RESULT SCREEN -->
+    <!-- ============ OGM03_01: 이벤트 화면 (플레이) ============ -->
+    <section class="screen" id="screen-play">
+      <div class="countdown-dim" id="countdownDim"><div class="countdown-text" id="countdownText">오늘의 기운을 확인하는 중…</div></div>
+
+      <div class="play-inner" id="playInner">
+        <h2 class="play-title">생년월일을 입력해주세요</h2>
+
+        <div class="field">
+          <label for="dateA">나의 생년월일</label>
+          <input type="date" id="dateA">
+        </div>
+        <div class="field">
+          <label for="dateB">상대방 생년월일</label>
+          <input type="date" id="dateB">
+        </div>
+        <p class="disclaimer">* 재미로 보는 간이 사주 궁합이며, 정식 명리 상담을 대체하지 않아요.</p>
+        <button class="reset-link" id="resetLink">테스트 기록 초기화</button>
+
+        <div class="hint-msg" id="dupMsg">오늘은 이미 확인한 조합이에요 🙈</div>
+
+        <div class="main-spacer"></div>
+        <button class="btn btn-primary" id="checkBtn">궁합 확인하기</button>
+      </div>
+    </section>
+
+    <!-- ============ OGM04: 이벤트 결과 화면 ============ -->
     <section class="screen" id="screen-result">
       <div class="result-top">
         <div class="couple-badge" id="coupleEmoji">💞</div>
@@ -240,31 +328,34 @@
         <div class="point-earned" id="pointEarnedMsg"></div>
       </div>
 
-      <div class="story-card" id="storyCard"></div>
-      <div class="story-card" id="chemiCard" style="background:#FFF7E6; border-color:#FFE1A8;"></div>
-      <div class="story-card" id="adviceCard" style="background:#EFF6FF; border-color:#CFE3FF;"></div>
+      <div class="result-scroll">
+        <div class="story-card" id="storyCard"></div>
+        <div class="story-card" id="chemiCard" style="background:#FFF7E6; border-color:#FFE1A8;"></div>
+        <div class="story-card" id="adviceCard" style="background:#EFF6FF; border-color:#CFE3FF;"></div>
+        <button class="brag-link" id="bragBtn">📣 친구에게 자랑하기</button>
 
-      <div class="footer-area">
         <div class="share-preview" id="sharePreview">
           <canvas id="shareCanvas" width="300" height="300"></canvas>
         </div>
-        <div class="btn-row">
-          <button class="btn btn-ad" id="resultAdBtn" style="display:none;">📺 광고 보고 한 번 더 하기</button>
-          <button class="btn btn-ghost" id="retryBtn">다시 궁합 보기</button>
-          <button class="btn btn-outline" id="shareBtn">결과 공유하기</button>
-        </div>
+      </div>
+
+      <div class="footer-area">
+        <div class="today-status" id="todayStatusResult"></div>
+        <button class="btn btn-ghost" id="retryBtn" style="display:none;">다시하기</button>
+        <button class="btn btn-ad" id="resultAdBtn" style="display:none;">📺 광고 보고 한 번 더 하기</button>
+        <button class="text-link" id="homeLinkBtn">처음으로</button>
       </div>
     </section>
 
   </div>
 
-  <!-- Bottom fixed ad slot -->
+  <!-- OGM18: 전 화면 고정 DA 배너 (최하단, 앱: 네이버DA / 웹: 구글DA - 목업) -->
   <div class="ad-banner">
     <div class="tag">AD</div>
     <div class="desc">광고 영역 (연동 예정)</div>
   </div>
 
-  <!-- Interstitial ad overlay -->
+  <!-- 광고보고 1번 더: 인터스티셜 목업 -->
   <div class="ad-overlay" id="adOverlay">
     <div class="ad-box">
       <div class="ad-tag">ADVERTISEMENT</div>
@@ -282,11 +373,10 @@
   'use strict';
 
   /* =========================================================
-     1. 실제 사주(일주) 이론 기반 궁합 스코어링
-     - 생년월일 → 60갑자(일주) 계산 → 일간(오행) + 일지(십이지) 관계 분석
-     - 조합 공간이 매우 커서(연 80 x 월 12 x 일 31 ≈ 3만 개/인) 반복 소진이 사실상 불가능
+     1. 실제 사주(일주) 이론 기반 궁합 스코어링 엔진
+     (이전 버전과 동일 — 검증된 로직 그대로 유지)
      ========================================================= */
-  const STEMS   = ['갑','을','병','정','무','기','경','신','임','계'];           // 천간 10개
+const STEMS   = ['갑','을','병','정','무','기','경','신','임','계'];           // 천간 10개
   const BRANCH_NAME = ['자','축','인','묘','진','사','오','미','신','유','술','해']; // 지지 12개 (한글 명칭)
   const BRANCH_ANIMAL_EMOJI = ['🐭','🐮','🐯','🐰','🐲','🐍','🐴','🐑','🐵','🐔','🐶','🐷'];
   const STEM_ELEMENT = [0,0,1,1,2,2,3,3,4,4]; // 갑을=목, 병정=화, 무기=토, 경신=금, 임계=수
@@ -679,19 +769,30 @@
     const i = Math.min(9, score - tier.min);
     return tier.tips[i % tier.tips.length];
   }
-  function elementSubText(sRel, bRel){
-    const sText = { sangsaeng:'서로를 키워주는 상생 관계', bihwa:'같은 기운이라 통하는 게 많은 관계', sanggeuk:'자극과 긴장이 있는 상극 관계' };
-    const bText = { trine:'일지가 삼합을 이뤄 궁합이 매우 좋아요', yukhap:'일지가 육합을 이뤄 안정적이에요',
-      same:'일지가 같아 취향이 비슷해요', neutral:'일지 관계는 무난한 편이에요',
-      sangchung:'일지가 충(沖)이라 티키타카가 강해요', wonjin:'일지가 원진이라 세심한 배려가 필요해요' };
-    return `오행으로는 <b>${sText[sRel]}</b>, 일지로는 ${bText[bRel]}예요.`;
-  }
 
   /* =========================================================
-     2. 상태 관리 (localStorage) - 하루 단위 리셋, 같은 조합은 하루 1회 제한
+     2. 진입 경로(OGM02) — 데모용 분기
+     실제 서비스에서는 앱 컨테이너가 판단해서 웹뷰 파라미터로 내려줌.
+     여기서는 ?entry=app 쿼리로 시뮬레이션 (기본값: 웹)
+     ========================================================= */
+  const ENTRY = new URLSearchParams(location.search).get('entry') === 'app' ? 'app' : 'web';
+  if(ENTRY === 'web'){ document.getElementById('webEntryBar').classList.add('show'); }
+
+  /* =========================================================
+     3. 이벤트 기간 표시 (MM/DD ~ MM/DD) - 데모용 30일 노출
+     ========================================================= */
+  (function renderEventPeriod(){
+    const fmt = d => `${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}`;
+    const start = new Date();
+    const end = new Date(); end.setDate(end.getDate()+30);
+    document.getElementById('eventPeriod').textContent = `이벤트 기간 ${fmt(start)} ~ ${fmt(end)}`;
+  })();
+
+  /* =========================================================
+     4. 상태 관리 (localStorage) - 하루 단위 리셋, 같은 조합은 하루 1회 제한
      ========================================================= */
   const STATE_KEY = 'compat_state_v2';
-  const HISTORY_KEY = 'compat_history_v3'; // v3: 이력 키를 '조합_날짜'로 변경 (일 1회 제한)
+  const HISTORY_KEY = 'compat_history_v3';
   const todayStr = () => new Date().toISOString().slice(0,10);
   function pairKeyOf(strA, strB){ return [strA, strB].sort().join('_'); }
   function dailyKeyOf(strA, strB){ return pairKeyOf(strA, strB) + '_' + todayStr(); }
@@ -713,14 +814,13 @@
 
   let state = loadState();
   let history = loadHistory();
-
   function triesLeft(){ return (state.freeUsed?0:1) + state.extraTries; }
 
   /* =========================================================
-     3. UI refs & helpers
+     5. 공통 UI 헬퍼
      ========================================================= */
   const $ = id => document.getElementById(id);
-  const screens = { home: $('screen-home'), result: $('screen-result') };
+  const screens = { main: $('screen-main'), play: $('screen-play'), result: $('screen-result') };
   function showScreen(name){
     Object.values(screens).forEach(s=>s.classList.remove('active'));
     screens[name].classList.add('active');
@@ -737,21 +837,27 @@
 
   function refreshPointsUI(){ $('pointsTotal').textContent = state.totalPoints; }
 
-  function refreshHomeUI(){
+  // 참여 횟수 표시 문구 (스킬 표준: "N번 더 도전할 수 있어요" / "0번 남았어요")
+  function participationText(){
     const left = triesLeft();
-    $('dupMsg').classList.remove('show');
-    $('noTryMsg').classList.remove('show');
-    if(left > 0){
-      $('todayStatus').textContent = state.freeUsed
-        ? `무료 확인 사용 완료 · 광고로 얻은 추가 기회 ${state.extraTries}회 남음 · 오늘 적립 ${state.pointsToday}/9P`
-        : `오늘 무료 확인 1회 남음 · 오늘 적립 ${state.pointsToday}/9P`;
-      $('checkBtn').disabled = false;
-      $('homeAdRow').style.display = 'none';
-    } else {
-      $('todayStatus').textContent = `오늘의 확인 기회를 모두 사용했어요 · 오늘 적립 ${state.pointsToday}/9P`;
-      $('checkBtn').disabled = true;
-      $('homeAdRow').style.display = 'block';
-    }
+    if(left <= 0) return '0번 남았어요';
+    return `${left}번 더 도전할 수 있어요`;
+  }
+
+  // ---- OGM03 메인 화면 갱신 ----
+  function refreshMainUI(){
+    const left = triesLeft();
+    $('todayStatusMain').textContent = participationText() + ` · 오늘 적립 ${state.pointsToday}/9P`;
+    $('startBtn').disabled = left <= 0;
+    $('mainAdRow').style.display = left <= 0 ? 'block' : 'none';
+  }
+
+  // ---- OGM04 결과 화면 버튼 갱신 ----
+  function refreshResultButtons(){
+    const left = triesLeft();
+    $('todayStatusResult').textContent = participationText() + ` · 오늘 적립 ${state.pointsToday}/9P`;
+    $('retryBtn').style.display = left > 0 ? 'block' : 'none';
+    $('resultAdBtn').style.display = left <= 0 ? 'block' : 'none';
   }
 
   // 날짜 입력 기본값/범위 설정
@@ -772,15 +878,10 @@
     return { y, m, d };
   }
 
-  // 날짜를 바꾸면 이전 안내 메시지(중복/기회소진)는 지워서 혼동 방지
   ['dateA','dateB'].forEach(id=>{
-    $(id).addEventListener('input', ()=>{
-      $('dupMsg').classList.remove('show');
-      $('noTryMsg').classList.remove('show');
-    });
+    $(id).addEventListener('input', ()=>{ $('dupMsg').classList.remove('show'); });
   });
 
-  // 테스트/QA 편의용 - 중복 확인 기록과 오늘 상태를 초기화 (실 서비스에서는 노출 여부 검토 필요)
   $('resetLink').addEventListener('click', ()=>{
     if(!confirm('테스트를 위해 저장된 확인 기록과 포인트를 모두 초기화할까요?')) return;
     localStorage.removeItem(STATE_KEY);
@@ -789,7 +890,7 @@
   });
 
   /* =========================================================
-     4. 배경음 (Web Audio API 로 직접 생성, 외부 음원 없음)
+     6. 배경음 (Web Audio API 로 직접 생성, 외부 음원 없음)
      ========================================================= */
   let audioCtx=null, bgmNodes=null, bgmOn=false;
   function ensureAudio(){ if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }
@@ -828,7 +929,7 @@
   function onFirstInteraction(){ if(!firstInteractionDone){ firstInteractionDone = true; startBGM(); } }
 
   /* =========================================================
-     5. 컨페티 (90점 이상 축하 애니메이션)
+     7. 컨페티 (90점 이상 축하 애니메이션)
      ========================================================= */
   function launchConfetti(){
     const colors = ['#E8192C','#FFB800','#FF7A45','#4CD964','#4A90D9'];
@@ -851,7 +952,49 @@
   }
 
   /* =========================================================
-     6. 궁합 확인 플로우
+     8. 공유 기능 (리워드 없음) - 메인 "공유하기" / 결과 "친구에게 자랑하기" 공용
+     실제 서비스에서는 share.requestKakao() 사용, 여기선 Web Share API/클립보드로 목업
+     ========================================================= */
+  function shareContent(title, text){
+    if(navigator.share){
+      navigator.share({ title, text, url: location.href }).catch(()=>{});
+    } else {
+      navigator.clipboard?.writeText(`${text}\n${location.href}`);
+      toast('공유 링크가 복사되었어요 🔗');
+    }
+  }
+  $('shareMainBtn').addEventListener('click', ()=>{
+    onFirstInteraction();
+    shareContent('오늘의 궁합테스트', '나랑 저 사람, 오늘 진짜 궁합은 몇 점일까? 지금 바로 확인해보세요!');
+  });
+  $('bragBtn').addEventListener('click', ()=>{
+    if(!lastResult) return;
+    shareContent('오늘의 궁합테스트 결과', `오늘 우리 궁합 점수는 ${lastResult.total}점! 너도 확인해봐 😆`);
+  });
+
+  /* =========================================================
+     9. 화면 전환: 메인 → (카운트다운) → 플레이
+     ========================================================= */
+  $('startBtn').addEventListener('click', ()=>{
+    onFirstInteraction();
+    if(triesLeft() <= 0) return;
+    showScreen('play');
+    const dim = $('countdownDim'), inner = $('playInner');
+    dim.classList.remove('hide'); inner.classList.remove('show');
+    $('countdownText').textContent = '오늘의 기운을 확인하는 중…';
+    setTimeout(()=>{
+      dim.classList.add('hide');
+      inner.classList.add('show');
+    }, 900);
+  });
+
+  $('homeLinkBtn').addEventListener('click', ()=>{
+    showScreen('main');
+    refreshMainUI();
+  });
+
+  /* =========================================================
+     10. 궁합 확인 플로우 (OGM03_01 → OGM04)
      ========================================================= */
   let lastResult = null;
 
@@ -868,10 +1011,7 @@
       $('dupMsg').classList.add('show');
       return;
     }
-    if(triesLeft() <= 0){
-      $('noTryMsg').classList.add('show');
-      return;
-    }
+    if(triesLeft() <= 0){ toast('오늘의 확인 기회를 모두 사용했어요'); return; }
 
     if(!state.freeUsed) state.freeUsed = true; else state.extraTries--;
 
@@ -910,9 +1050,7 @@
     }, 20);
 
     $('storyCard').innerHTML = `<span style="font-size:22px;">${story.emoji}</span> <b>${story.title}</b><br>${story.text}<div class="story-sub">${elementSubText(r.sRel, r.bRel)}</div>`;
-
     $('chemiCard').innerHTML = `${r.chemi.emoji} <b>기본 궁합 ${r.score}점 ${r.chemi.bonus>=0?'+':''}${r.chemi.bonus} (오늘의 케미)</b> = 오늘 총점 <b>${r.total}점</b><div class="story-sub">${r.chemi.label} · 같은 조합도 내일 다시 도전하면 새 점수로 다시 포인트를 노릴 수 있어요.</div>`;
-
     $('adviceCard').innerHTML = `💡 <b>오늘의 조언</b><div class="story-sub">${adviceFor(r.total)}</div>`;
 
     let msg = '';
@@ -920,17 +1058,24 @@
     else if(r.total>=90 && r.capped) msg = '90점 달성! 다만 오늘 적립 한도(9P)를 모두 채웠어요';
     $('pointEarnedMsg').textContent = msg;
 
-    $('resultAdBtn').style.display = triesLeft()>0 ? 'none' : 'block';
     $('sharePreview').classList.remove('show');
+    refreshResultButtons();
 
     if(r.total >= 90) launchConfetti();
-    refreshHomeUI();
   }
 
-  $('retryBtn').addEventListener('click', ()=>{ showScreen('home'); refreshHomeUI(); });
+  // 다시하기: 참여기회 있을 때만 노출 → 플레이 화면으로 바로 재진입 (카운트다운 짧게)
+  $('retryBtn').addEventListener('click', ()=>{
+    showScreen('play');
+    $('dupMsg').classList.remove('show');
+    const dim = $('countdownDim'), inner = $('playInner');
+    dim.classList.remove('hide'); inner.classList.remove('show');
+    $('countdownText').textContent = '오늘의 기운을 다시 확인하는 중…';
+    setTimeout(()=>{ dim.classList.add('hide'); inner.classList.add('show'); }, 700);
+  });
 
   /* =========================================================
-     7. 광고 보고 한 번 더 하기 (5초 인터스티셜 시뮬레이션)
+     11. 광고 보고 한 번 더 (5초 인터스티셜 시뮬레이션) — 메인/결과 공용
      ========================================================= */
   function playInterstitialAd(onDone){
     const overlay = $('adOverlay');
@@ -953,16 +1098,16 @@
     state.extraTries++;
     saveState(state);
     toast('광고 시청 완료! 도전 기회 +1 🎁');
-    refreshHomeUI();
-    $('resultAdBtn').style.display = 'none';
+    refreshMainUI();
+    refreshResultButtons();
   }
-  $('homeAdBtn').addEventListener('click', ()=>{ onFirstInteraction(); playInterstitialAd(grantExtraTry); });
+  $('mainAdBtn').addEventListener('click', ()=>{ onFirstInteraction(); playInterstitialAd(grantExtraTry); });
   $('resultAdBtn').addEventListener('click', ()=>{ onFirstInteraction(); playInterstitialAd(grantExtraTry); });
 
   /* =========================================================
-     8. 결과 공유 (Canvas 이미지 생성)
+     12. 결과 공유 이미지 (Canvas) — '친구에게 자랑하기' 클릭 시 미리보기 생성
      ========================================================= */
-  $('shareBtn').addEventListener('click', ()=>{
+  $('bragBtn').addEventListener('click', ()=>{
     if(!lastResult) return;
     const canvas = $('shareCanvas');
     const ctx = canvas.getContext('2d');
@@ -1000,7 +1145,6 @@
     ctx.fillText('#궁합테스트 결과공유', w/2, h-28);
 
     $('sharePreview').classList.add('show');
-    toast('공유 이미지를 만들었어요. 길게 눌러 저장해보세요!');
   });
 
   function roundRect(ctx,x,y,w,h,r){
@@ -1014,10 +1158,10 @@
   }
 
   /* =========================================================
-     9. 초기화
+     13. 초기화
      ========================================================= */
   refreshPointsUI();
-  refreshHomeUI();
+  refreshMainUI();
 })();
 </script>
 </body>
